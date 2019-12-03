@@ -14,6 +14,7 @@ bot.on('scan', (url, code) => {
     console.log(`${url}\n[${code}] Scan QR Code in above url to login: `)
 })
 bot.on('login', user => {
+    //cron表达式 '0 0 8 * * ? '  每天8点
     schedule.setSchedule("0 0 8 * * ? ", () => {
         main()
     })
@@ -43,8 +44,10 @@ async function main() {
     let b = moment([y, m, d])
 
     let contact = await bot.Contact.find({
+      // 你想发送的人的微信昵称
         name: '{}'
     })
+    // 此处使用的是聚合数据，需要自己注册
     axios.get('http://v.juhe.cn/weather/index?key=你的key&cityname=1840').then(v => {
         const {
             result: {
@@ -68,7 +71,7 @@ async function main() {
                 content,
                 note
             } = vv.data
-            logMsg = `今天是${date_y} ${week}<br>我们在一起的第${b.diff(a,'days')+1}天(*^▽^*)<br>天气情况如下:<br>${city}<br>${weather}<br>温度${temperature}<br>湿度${humidity} ${wind} ${dressing_index}<br><br>${content}<br><br>${note}`
+            logMsg = `今天是${date_y} ${week}<br>我们凉透的第${b.diff(a,'days')+1}天(*^▽^*)<br>天气情况如下:<br>${city}<br>${weather}<br>温度${temperature}<br>湿度${humidity} ${wind} ${dressing_index}<br><br>${content}<br><br>${note}`
             contact.say(logMsg)
         })
     })
